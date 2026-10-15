@@ -37,7 +37,6 @@ void tournament_kernel(const std::vector<program> &progs, int *win_indices,
                        const float parsimony) {
   PhiloxEngine gen(seed);
   uniform_int_distribution_custom<int> rng(0, n_progs - 1);
-
   for (auto idx = 0; idx < n_tours; ++idx) {
     int r;
     r = rng(gen);
