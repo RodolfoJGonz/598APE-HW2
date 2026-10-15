@@ -1,9 +1,5 @@
 CXX := g++
-<<<<<<< Updated upstream
-CXXFLAGS := -O3 -flto -march=native -fopenmp -std=c++17 -Wall -Wextra -I include -I. 
-=======
 CXXFLAGS := -O3 -fopenmp -fno-omit-frame-pointer -g -flto -march=native -std=c++17 -Wall -Wextra -I include -I. 
->>>>>>> Stashed changes
 
 # Directories
 SRC_DIR := src
