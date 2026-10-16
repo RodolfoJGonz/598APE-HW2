@@ -21,11 +21,11 @@ namespace genetic {
 template <int MaxSize = MAX_STACK_SIZE>
 void execute_kernel(const program_t d_progs, const float *data, float *y_pred,
                     const uint64_t n_rows, const uint64_t n_progs) {
-	#pragma omp parallel for schedule(auto)
-  for (uint64_t pid = 0; pid < n_progs; ++pid) {
-    for (uint64_t row_id = 0; row_id < n_rows; ++row_id) {
+#pragma omp parallel for
+  for (uint64_t row_id = 0; row_id < n_rows; ++row_id) {
+    stack<float, MaxSize> eval_stack;
+    for (uint64_t pid = 0; pid < n_progs; ++pid) {
 
-      stack<float, MaxSize> eval_stack;
       program_t curr_p = d_progs + pid; // Current program
 
       int end = curr_p->len - 1;
@@ -124,8 +124,9 @@ void find_batched_fitness(int n_progs, program_t d_progs, float *score,
                           const param &params, const int n_rows,
                           const float *data, const float *y,
                           const float *sample_weights) {
-
-  std::vector<float> y_pred((uint64_t)n_rows * (uint64_t)n_progs);
+  static std::vector<float> y_pred;
+  y_pred.resize((uint64_t)n_rows * (uint64_t)n_progs);
+  // std::vector<float> y_pred((uint64_t)n_rows * (uint64_t)n_progs);
   execute(d_progs, n_rows, n_progs, data, y_pred.data());
 
   // Compute error
