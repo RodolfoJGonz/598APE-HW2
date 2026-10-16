@@ -244,20 +244,28 @@ void meanSquareError(const uint64_t n_samples, const uint64_t n_progs,
   }
 
   // Compute absolute differences
-  for (uint64_t pid = 0; pid < n_progs; ++pid) {
-    for (uint64_t i = 0; i < n_samples; ++i) {
-      error[pid * n_samples + i] = N * W[i] *
-                                   (Y_pred[pid * n_samples + i] - Y[i]) *
-                                   (Y_pred[pid * n_samples + i] - Y[i]) / WS;
-    }
-  }
+  // for (uint64_t pid = 0; pid < n_progs; ++pid) {
+  //   for (uint64_t i = 0; i < n_samples; ++i) {
+  //     error[pid * n_samples + i] = N * W[i] *
+  //                                  (Y_pred[pid * n_samples + i] - Y[i]) *
+  //                                  (Y_pred[pid * n_samples + i] - Y[i]) / WS;
+  //   }
+  // }
 
   // Average along rows
+  // for (uint64_t pid = 0; pid < n_progs; ++pid) {
+  //   out[pid] = static_cast<math_t>(0);
+  //   for (uint64_t i = 0; i < n_samples; ++i) {
+  //     out[pid] += error[pid * n_samples + i] / N;
+  //   }
+  // }
   for (uint64_t pid = 0; pid < n_progs; ++pid) {
-    out[pid] = static_cast<math_t>(0);
+    math_t sum = static_cast<math_t>(0);
     for (uint64_t i = 0; i < n_samples; ++i) {
-      out[pid] += error[pid * n_samples + i] / N;
+      const math_t diff = Y_pred[pid * n_samples + i] - Y[i];
+      sum += W[i] * diff * diff;
     }
+    out[pid] = sum / WS;
   }
 }
 
