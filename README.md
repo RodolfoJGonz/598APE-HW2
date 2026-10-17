@@ -17,8 +17,8 @@ The benchmark prints an end-to-end runtime. Evolution is randomized, so run each
 | Compiler flags | `8a8011f` |
 | Parallelism | `85e3edf` |
 | Data structures | `b23d381` |
-| Evaluation loop order and prediction-buffer reuse | `622b28b` |
-| MSE work reduction | `0db46a9` |
+| Prediction-buffer reuse, without row-parallel loop order or MSE change | `df5354d` plus `include/fitness.h` from `622b28b` |
+| MSE work reduction | `df5354d` (introduced in `0db46a9`) |
 
 ## Compare the performance commits
 
@@ -45,13 +45,14 @@ git checkout -f b23d381
 make clean
 make -j
 
-## Evaluation loop order and prediction-buffer reuse
-git checkout -f 622b28b
+## Prediction-buffer reuse only
+git checkout -f df5354d
+git checkout 622b28b -- include/fitness.h
 make clean
 make -j
 
 ## MSE work reduction
-git checkout -f 0db46a9
+git checkout -f df5354d
 make clean
 make -j
 ```
@@ -65,3 +66,4 @@ After each build, run the benchmark workloads:
 ./genetic_benchmark silk-wave
 ./genetic_benchmark square-wave
 ```
+
